@@ -8,7 +8,7 @@ request.get(url, (err, response, body) => {
     return;
   }
   const todos = JSON.parse(body);
-  let count = {};
+  const count = {};
   for (const todo of todos) {
     if (todo.completed) {
       if (count[todo.userId]) {
@@ -18,5 +18,11 @@ request.get(url, (err, response, body) => {
       }
     }
   }
-  console.log(count);
+
+  const sortedCount = Object.entries(count).sort((a, b) => a[0] - b[0]);
+  const formattedOutput = {};
+  for (const [userId, taskCount] of sortedCount) {
+    formattedOutput[userId] = taskCount;
+  }
+  console.log(formattedOutput);
 });
