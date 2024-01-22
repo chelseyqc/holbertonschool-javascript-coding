@@ -1,6 +1,6 @@
 #!/usr/bin/node
 const request = require('request');
-const url = 'https://jsonplaceholder.typicode.com/todos';
+const url = process.argv[2];
 
 request.get(url, (err, response, body) => {
   if (err) {
@@ -13,8 +13,7 @@ request.get(url, (err, response, body) => {
     if (todo.completed) {
       if (count[todo.userId]) {
         count[todo.userId] = count[todo.userId] + 1;
-      }
-      else {
+      } else {
         count[todo.userId] = 1;
       }
     }
