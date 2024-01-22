@@ -12,7 +12,7 @@ request.get(url, (err, response, body) => {
   for (const film of result) {
     for (const charUrl of film.characters) {
       const charID = charUrl.split('/').filter(Boolean).pop();
-      if (charID === '18')  {
+      if (charID === '18') {
         count = count + 1;
       }
     }
