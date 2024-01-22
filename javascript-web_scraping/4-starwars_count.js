@@ -11,7 +11,7 @@ request.get(url, (err, response, body) => {
   const result = JSON.parse(body).results;
   for (const film of result) {
     for (const charUrl of film.characters) {
-      const charID = charUrl.split('/'). filter(Boolean).pop();
+      const charID = charUrl.split('/').filter(Boolean).pop();
       if (charID === '18')  {
         count = count + 1;
       }
