@@ -1,7 +1,7 @@
 #!/usr/bin/node
 const request = require('request');
 const url = 'https://swapi-api.hbtn.io/api/films/';
-const wedgeID = 'https://swapi-api.hbtn.io/api/people/18/';
+const wedgeID = 18;
 
 request.get(url, (err, response, body) => {
   if (err) {
@@ -11,8 +11,11 @@ request.get(url, (err, response, body) => {
   let count = 0;
   const result = JSON.parse(body).results;
   for (const film of result) {
-    if (film.characters.includes(wedgeID)) {
-      count = count + 1;
+    for (const charUrl of film.characters) {
+      const charID = charUrl.split('/'). filter(Boolean).pop();
+      if (charID === '18')  {
+        count = count + 1;
+      }
     }
   }
   console.log(count);
