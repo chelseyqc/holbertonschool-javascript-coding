@@ -5,20 +5,20 @@ module.exports = function countStudents(path) {
     // Read the database file synchronously
     const data = fs.readFileSync(path, 'utf8');
     // Split the data by lines and remove header
-    const lines = data.split('\n').slice(1).filter(line => line.trim() !== '');
+    const lines = data.split('\n').slice(1).filter((line) => line.trim() !== '');
 
     let totalStudents = 0;
     const studentsByField = {};
 
     // Iterate over the lines and count students by field
-    lines.forEach(line => {
+    lines.forEach((line) => {
       const [firstname, , , field] = line.split(',');
       if (!studentsByField[field]) {
-        studentsByField[field] = { count: 0, names: []};
+        studentsByField[field] = { count: 0, names: [] };
       }
-      studentsByField[field].count = studentsByField[field].count + 1;
+      studentsByField[field].count += 1;
       studentsByField[field].names.push(firstname);
-      totalStudents = totalStudents + 1;
+      totalStudents += 1;
     });
 
     // Log the number of students
