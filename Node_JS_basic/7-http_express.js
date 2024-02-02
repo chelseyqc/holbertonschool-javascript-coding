@@ -35,7 +35,7 @@ app.get('/students', async (req, res) => {
     res.send(responseText);
   } catch (error) {
     res.type('text/plain');
-    res.status(500).send('This is the list o f our students\nCannot load the database');
+    res.status(500).send('This is the list of our students\nCannot load the database');
   }
 });
 
