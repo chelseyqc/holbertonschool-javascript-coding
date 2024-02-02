@@ -28,10 +28,10 @@ module.exports = function countStudents(path) {
     for (const field in studentsByField) {
       if (studentsByField[field]) {
         console.log(`Number of students in ${field}: ${studentsByField[field].count}.\
-      List: ${studentsByField[field].names.join(', ')}`);
+ List: ${studentsByField[field].names.join(', ')}`);
       }
     }
   } catch (error) {
     throw new Error('Cannot load the database');
   }
-}
+};
