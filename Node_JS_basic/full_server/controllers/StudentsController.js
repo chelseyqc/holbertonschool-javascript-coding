@@ -3,7 +3,7 @@ const readDatabase = require('../utils');
 class StudentsController {
   static getAllStudents(req, res) {
     try {
-      const database = await readDatabase();
+      const database = readDatabase();
       const studentsByField = {};
 
       // Count the number of students in each field
@@ -35,7 +35,7 @@ class StudentsController {
 
   static getAllStudentsByMajor(req, res) {
     try {
-      const database = await readDatabase();
+      const database = readDatabase();
       const major = req.query.major.toUpperCase();
 
       if (major !== 'CS' && major !== 'SWE') {
