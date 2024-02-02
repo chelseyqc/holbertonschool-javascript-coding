@@ -1,32 +1,28 @@
-const fs = require('fs');
+const { readFile } = require('fs').promises;
 
-function readDatabase(filePath) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(filePath, 'utf8', (err, data) => {
-      if (err) {
-        reject(Error('Cannot load the database'));
-      } else {
-        try {
-          const lines = data.split('\n');
-          const students = lines.slice(1); // remove headers
-          const result = {};
+async function readDatabase(path) {
+  try {
+    const data = await readFile(path, 'utf-8');
+    const lines = data.split('\n').filter((line) => line.trim() !== '');
 
-          students.forEach((line) => {
-            const [firstname, , , field] = line.split(',');
-            if (!field || !firstname) return;
+    const studentData = lines.slice(1).map((line) => line.split(','));
 
-            if (!result[field]) {
-              result[field] = [];
-            }
-            result[field].push(firstname);
-          });
-          resolve(result);
-        } catch (error) {
-          reject(Error('Failed to parse database file'));
-        }
+    const cs = [];
+    const swe = [];
+    for (let i = 0; i < studentData.length; i += 1) {
+      if (studentData[i][3] === 'CS') {
+        cs.push(studentData[i][0]);
+      } else if (studentData[i][3] === 'SWE') {
+        swe.push(studentData[i][0]);
       }
-    });
-  });
+    }
+    return {
+      CS: cs,
+      SWE: swe,
+    };
+  } catch (error) {
+    throw new Error('Cannot load the database');
+  }
 }
 
 module.exports = readDatabase;
