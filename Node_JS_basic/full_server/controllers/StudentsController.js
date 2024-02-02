@@ -18,7 +18,7 @@ class StudentsController {
     try {
       const major = req.params.major.toUpperCase();
       if (!['CS', 'SWE'].includes(major)) {
-        res.status(500).send('Major parameter must be CS or SWE');
+        return res.status(500).send('Major parameter must be CS or SWE');
       }
       const database = await readDatabase(process.argv[2]);
       if (!database[major]) {
