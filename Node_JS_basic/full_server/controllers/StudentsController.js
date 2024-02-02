@@ -1,65 +1,32 @@
 const readDatabase = require('../utils');
 
 class StudentsController {
-  static getAllStudents(req, res) {
+  static async getAllStudents(req, res) {
     try {
-      const database = readDatabase();
-      const studentsByField = {};
-
-      // Count the number of students in each field
-      for (const student of database) {
-        const field = student.field.toLowerCase();
-        if (!studentsByField[field]) {
-          studentsByField[field] = [];
-        }
-        studentsByField[field].push(student.firstName);
-      }
-
-      // Sort the fields alphabetically
-      const sortedFields = Object.keys(studentsByField).sort();
-
-      // Prepare the response
-      let responseBody = 'This is the list of our students\n';
-      for (const field of sortedFields) {
-        const students = studentsByField[field];
-        const numberOfStudents = students.length;
-        const studentList = students.join(', ');
-        responseBody += `Number of students in ${field.toUpperCase()}: ${numberOfStudents}. List: ${studentList}\n`;
-      }
-
-      res.status(200).send(responseBody);
+      const database = await readDatabase(process.argv[2]);
+      res.status(200)
+        .send(`This is the list of our students\nNumber of students in CS: ${database.CS.length}.\
+ List: ${database.CS.join(', ')}\nNumber of students in SWE: ${database.SWE.length}.\
+ List: ${database.SWE.join(', ')}`);
+      res.end();
     } catch (error) {
       res.status(500).send('Cannot load the database');
     }
   }
 
-  static getAllStudentsByMajor(req, res) {
+  static async getAllStudentsByMajor(req, res) {
     try {
-      const database = readDatabase();
-      const major = req.query.major.toUpperCase();
-
-      if (major !== 'CS' && major !== 'SWE') {
+      const major = req.params.major.toUpperCase();
+      if (!['CS', 'SWE'].includes(major)) {
         res.status(500).send('Major parameter must be CS or SWE');
-        return;
       }
-
-      let studentsByMajor = database.filter((student) => student.field.toUpperCase() === major)
-        .map((student) => student.firstName);
-
-      // Filter students by major
-      for (const student of database) {
-        if (student.major === major) {
-          studentsByMajor.push(student.firstName);
-        }
+      const database = await readDatabase(process.argv[2]);
+      if (!database[major]) {
+        return res.status(500).send(`Major ${major} does not exist`);
       }
-
-      // Prepare the response
-      const studentList = studentsByMajor.join(', ');
-      const responseBody = `List: ${studentList}`;
-
-      res.status(200).send(responseBody);
+      return res.status(200).send(`List: ${database[major].join(', ')}`);
     } catch (error) {
-      res.status(500).send('Cannot load the database');
+      return res.status(500).send('Cannot load the database');
     }
   }
 }
