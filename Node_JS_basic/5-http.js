@@ -41,7 +41,7 @@ const app = http.createServer(async (req, res) => {
       res.end();
     } catch (error) {
       res.writeHead(500);
-      res.end('Cannot load the database');
+      res.end('This is the list of our students\nCannot load the database');
     }
   }
 });
